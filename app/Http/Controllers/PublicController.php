@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Postagem;
 
 class PublicController extends Controller
 {
@@ -23,7 +24,8 @@ class PublicController extends Controller
      */
     public function index()
     {
-        return view('public');
+        $postagens = Postagem::where('ativa', 'S')->get();
+        return view('public', ['postagens' => $postagens]);
     }
 
     public function postagem()

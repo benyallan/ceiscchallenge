@@ -11,4 +11,7 @@ class Postagem extends Model
 
     protected $table = 'postagem';
     protected $primaryKey = "id";
+    protected $fillable = [
+        'titulo', 'descricao', 'imagem', 'ativa'
+    ];
 }
