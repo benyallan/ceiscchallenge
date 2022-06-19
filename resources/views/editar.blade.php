@@ -31,10 +31,13 @@
                     <div class="form-group">
                         <label for="imagem">Imagem: </label>
                         <img 
+                            id="preview"
                             src="{{ Storage::url($postagem->imagem) }}" 
                             class="card-img-top" alt="imagem"
                         >
                         <input 
+                            accept="image/*" 
+                            onchange="previewImage(event)"
                             class="form-control-file" type="file" 
                             name="imagem" id="imagem"
                         >
@@ -77,6 +80,11 @@
 </div>
 @endsection
 <script type="text/javascript">
+        const previewImage = e => {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(e.target.files[0]);
+            preview.onload = () => URL.revokeObjectURL(preview.src);
+        };
         function sendForm(event, postagem) {
             event.preventDefault();
             var metas = document.getElementsByTagName('meta');
