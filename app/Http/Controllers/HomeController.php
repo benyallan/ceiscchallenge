@@ -24,8 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $array['postagens'] = ModelPostagem::get();
+        $postagens = ModelPostagem::all();
 
-        return view('home', $array);
+        return view('home', ['postagens' => $postagens]);
     }
 }
