@@ -39,6 +39,20 @@ class PostsController extends Controller
         return $postagem;
     }
 
+    public function edit(Postagem $postagem)
+    {
+        return view('editar', ['postagem' => $postagem]);
+    }
+
+    public function update(Postagem $postagem, Request $request)
+    {
+        $data = $request->all();
+        if ($request->imagem) {
+            $data['imagem'] = $request->imagem->store('images', 'public');
+        }
+        $postagem->update($data);
+    }
+
     public function destroy(Postagem $postagem)
     {
         $postagem->delete();

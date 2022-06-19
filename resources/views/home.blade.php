@@ -32,6 +32,11 @@
                                 <span id="visibilidade-{{$postagem->id}}">Postagem não publicada</span>
                             @endif
                             <div class="card-footer">
+                                <a href="{{route('posts.edit', $postagem->id)}}"
+                                class="btn btn-info"
+                                >
+                                    Editar
+                                </a>
                                 @if ($postagem->ativa == "N")
                                     <button 
                                         id="btnPublicar-{{$postagem->id}}"
@@ -72,8 +77,7 @@
             }
         };
         let url = "{{url('/posts')}}"
-        url += "/" + postagem;
-        console.log(url);
+        url += "/" + postagem + "/publicar";
         ajax.open('PUT', url);
         ajax.setRequestHeader("X-CSRF-Token", metas[2].getAttribute("content"));
         ajax.send(postagem);

@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Nova postagem</div>
+                <div class="card-header">Editar postagem</div>
 
                 <div class="card-body">
                     <form 
@@ -18,6 +18,7 @@
                         <input 
                             class="form-control" type="text" 
                             name="titulo" id="titulo"
+                            value="{{$postagem->titulo}}"
                         >
                     </div>
                     <div class="form-group">
@@ -25,10 +26,14 @@
                         <textarea 
                             class="form-control"
                             name="descricao" id="descricao" cols="30" rows="10"
-                        ></textarea>
+                        >{{$postagem->descricao}}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="imagem">Imagem: </label>
+                        <img 
+                            src="{{ Storage::url($postagem->imagem) }}" 
+                            class="card-img-top" alt="imagem"
+                        >
                         <input 
                             class="form-control-file" type="file" 
                             name="imagem" id="imagem"
@@ -37,17 +42,22 @@
                     <div class="form-group">
                         <label for="ativa">Pública: </label>
                         <select class="form-control" name="ativa" id="ativa">
-                            <option value="S">Sim</option>
-                            <option value="N">Não</option>
+                            @if ($postagem->ativa == "S")
+                                <option value="S">Sim</option>
+                                <option value="N">Não</option>
+                            @else
+                                <option value="N">Não</option>
+                                <option value="S">Sim</option>
+                            @endif
                         </select>
                     </div>
                     <div class="form-group">
                         <button 
                             class="btn btn-primary"
-                            name="btnPostar" id="btnPostar"
-                            onclick="sendForm(event)"
+                            name="btnAtualizar" id="btnAtualizar"
+                            onclick="sendForm(event, {{$postagem->id}})"
                         >
-                            Postar
+                            Atualizar
                         </button>
                     </div>
                     </form>
@@ -67,23 +77,28 @@
 </div>
 @endsection
 <script type="text/javascript">
-        function sendForm(event) {
+        function sendForm(event, postagem) {
             event.preventDefault();
+            var metas = document.getElementsByTagName('meta');
             let frmAddPost = document.querySelector('#form-add-post');
             let ajax = new XMLHttpRequest();
             let formData = new FormData(frmAddPost);
-            let btnPostar = document.querySelector('#btnPostar');
+            let btnAtualizar = document.querySelector('#btnAtualizar');
             let result = document.querySelector('#result');
             let progress = document.querySelector('.progress');
 
-            ajax.open('POST', "{{route('posts.store')}}");
+            let url = "{{url('/posts')}}"
+            url += "/" + postagem;
+            console.log(formData);
+            ajax.open('POST', url);
+            ajax.setRequestHeader("X-CSRF-Token", metas[2].getAttribute("content"));
             ajax.upload.onprogress = function (event) {
                 if (event.lengthComputable) {
                     progress.style.width = ((event.loaded * 100) / event.total) + "%";
                 }
             }
             ajax.onloadend = function () {
-                result.innerHTML = 'Postagem criada com sucesso';
+                result.innerHTML = 'Postagem atualizada com sucesso';
             }
             ajax.send(formData);
         }

@@ -8,7 +8,10 @@
                 <div class="card-header">{{$postagem->titulo}}</div>
         
                 <div class="card-body">
-                    <img src="{{ Storage::url($postagem->imagem) }}" class="card-img-top" alt="...">
+                    <img 
+                        src="{{ Storage::url($postagem->imagem) }}" 
+                        class="card-img-top" alt="imagem"
+                    >
                     <p class="card-text">{{$postagem->descricao}}</p>
                     
                 </div>
